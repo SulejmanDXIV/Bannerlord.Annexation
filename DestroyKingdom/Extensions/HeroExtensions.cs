@@ -1,7 +1,3 @@
-// ReSharper disable UnusedMember.Global
-// ReSharper disable MemberCanBePrivate.Global
-// ReSharper disable UnusedMethodReturnValue.Global
-
 using TaleWorlds.CampaignSystem;
 
 namespace DestroyKingdom.Extensions;

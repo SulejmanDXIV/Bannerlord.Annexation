@@ -8,7 +8,7 @@ using TaleWorlds.Localization;
 
 namespace DestroyKingdom.CampaignBehaviors
 {
-    internal class AnnexationConversationCampaignBehavior : CampaignBehaviorBase
+    internal class PlayerRulerAnnexationConversationCampaignBehavior : CampaignBehaviorBase
     {
         private const string AnnexationRequestedToken = "annexation_requested";
         private const string FirstReasonToken = "annexation_give_first_reason";
@@ -177,7 +177,7 @@ namespace DestroyKingdom.CampaignBehaviors
                 inputToken: "annexation_oath_5",
                 outputToken: NativeGameTokens.LordPreTalk,
                 text: "You are now my {HERO_KINGDOM_TITLE}.",
-                consequence: KingdomAnnexationAction.Apply
+                consequence: KingdomAnnexationAction.ApplyByPlayerConversation
             );
         }
 
@@ -220,7 +220,7 @@ namespace DestroyKingdom.CampaignBehaviors
             explanation = null;
             if (heroKingdom == null || playerKingdom == null) return false;
             var strengthRatio = KingdomExtensions.KingdomsStrengthRatio(heroKingdom, playerKingdom);
-            var enoughStrengthAdvantage = strengthRatio < 25;
+            var enoughStrengthAdvantage = strengthRatio < KingdomAnnexationCondition.RequiredStrengthRatio;
             if (strengthRatio > 100)
                 explanation = new TextObject("{HERO_KINGDOM} is stronger than {PLAYER_KINGDOM}.");
             else if (!enoughStrengthAdvantage)
@@ -232,17 +232,21 @@ namespace DestroyKingdom.CampaignBehaviors
 
         private static bool PlayerControllingCultureTownsClickableCondition(out TextObject? explanation)
         {
-            var heroCulture = Hero.OneToOneConversationHero?.Clan?.Kingdom.Culture;
-            var playerKingdom = Hero.MainHero?.Clan?.Kingdom;
             explanation = null;
-            if (playerKingdom == null || heroCulture == null) return false;
-            var playerControlledHeroCultureFiefsPercentage =
-                TownExtensions.KingdomControlledCultureFiefsPercentage(playerKingdom, heroCulture);
-            var requiredFiefsPercentage = heroCulture.StringId == "empire" ? 45 : 40;
-            var controllingEnoughFiefs = playerControlledHeroCultureFiefsPercentage >= requiredFiefsPercentage;
+            var controllingEnoughFiefs = KingdomAnnexationCondition.ControllingEnoughCultureLands(
+                annexingKingdom: Hero.MainHero?.Clan?.Kingdom,
+                annexedKingdom: Hero.OneToOneConversationHero?.Clan?.Kingdom,
+                controlledFiefsPercentage: out var playerControlledHeroCultureFiefsPercentage,
+                requiredFiefsPercentage: out var requiredFiefsPercentage
+            );
             if (!controllingEnoughFiefs)
+            {
+                var cultureName = Hero.OneToOneConversationHero?.Clan?.Kingdom?.Culture?.Name ?? TextObject.Empty;
                 explanation = new TextObject(
-                    $"You are controlling {playerControlledHeroCultureFiefsPercentage}% of {heroCulture.Name} fiefs ({requiredFiefsPercentage}% required).");
+                    $"You are controlling {playerControlledHeroCultureFiefsPercentage}% of {cultureName} fiefs ({requiredFiefsPercentage}% required)."
+                );
+            }
+
             return controllingEnoughFiefs;
         }
 

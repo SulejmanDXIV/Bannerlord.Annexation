@@ -1,12 +1,10 @@
-// ReSharper disable UnusedMember.Global
-// ReSharper disable MemberCanBePrivate.Global
-// ReSharper disable UnusedMethodReturnValue.Global
-
+using System.Diagnostics.CodeAnalysis;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Conversation;
 
 namespace DestroyKingdom.Extensions;
 
+[SuppressMessage("ReSharper", "UnusedMethodReturnValue.Global")]
 public static class CampaignGameStarterExtensions
 {
     public static ConversationSentence AddPlayerLine(

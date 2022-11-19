@@ -1,4 +1,5 @@
-﻿using DestroyKingdom.CampaignBehaviors;
+﻿using System.Collections.Generic;
+using DestroyKingdom.CampaignBehaviors;
 using JetBrains.Annotations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -13,7 +14,16 @@ namespace DestroyKingdom
         {
             if (game.GameType is Campaign)
             {
-                ((CampaignGameStarter)gameStarterObject).AddBehavior(new AnnexationConversationCampaignBehavior());
+                var behaviors = new List<CampaignBehaviorBase>
+                {
+                    new PlayerRulerAnnexationConversationCampaignBehavior(),
+                    new OtherRulersAnnexationCampaignBehavior(),
+                    new FixEmptyKingdomLeaderCampaignBehavior()
+                };
+                foreach (var behavior in behaviors)
+                {
+                    ((CampaignGameStarter)gameStarterObject).AddBehavior(behavior);
+                }
             }
         }
     }

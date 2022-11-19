@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.SceneInformationPopupTypes;
@@ -6,36 +7,47 @@ using TaleWorlds.Core;
 
 namespace DestroyKingdom.Actions;
 
+[SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
 internal static class KingdomAnnexationAction
 {
-    public static void Apply()
+    public static void ApplyByPlayerConversation()
     {
-        var newKingdom = Hero.MainHero.Clan.Kingdom;
-        var annexedKingdom = Hero.OneToOneConversationHero.Clan.Kingdom;
+        var annexedKingdom = Hero.OneToOneConversationHero?.Clan?.Kingdom;
+        var annexingKingdom = Hero.MainHero?.Clan?.Kingdom;
+        if (annexingKingdom == null || annexedKingdom == null) return;
+        Apply(annexedKingdom, annexingKingdom);
+    }
+
+    public static void Apply(Kingdom annexedKingdom, Kingdom annexingKingdom, bool showNotification = true)
+    {
         List<Clan> annexedClans = new(annexedKingdom.Clans);
         foreach (var clan in annexedClans)
         {
             if (clan.IsClanTypeMercenary)
             {
-                ChangeKingdomAction.ApplyByLeaveKingdomAsMercenary(clan);
+                ChangeKingdomAction.ApplyByLeaveKingdomAsMercenary(clan, showNotification);
             }
             else if (clan.IsMinorFaction)
             {
-                ChangeKingdomAction.ApplyByLeaveKingdom(clan);
+                ChangeKingdomAction.ApplyByLeaveKingdom(clan, showNotification);
             }
             else
             {
-                ChangeKingdomAction.ApplyByJoinToKingdom(clan, newKingdom);
-                if (clan.Equals(annexedKingdom.RulingClan))
+                ChangeKingdomAction.ApplyByJoinToKingdom(clan, annexingKingdom, showNotification);
+                if (showNotification && clan.Equals(annexedKingdom.RulingClan))
                 {
-                    SceneNotificationData scene = new JoinKingdomSceneNotificationItem(clan, newKingdom);
+                    SceneNotificationData scene = new JoinKingdomSceneNotificationItem(clan, annexingKingdom);
                     MBInformationManager.ShowSceneNotification(scene);
                 }
             }
         }
 
-        MakePeaceAction.ApplyPardonPlayer(annexedKingdom);
+        if (annexedKingdom.GetStanceWith(annexingKingdom).IsAtWar)
+        {
+            MakePeaceAction.Apply(annexedKingdom, annexingKingdom);
+        }
+
         DestroyKingdomAction.Apply(annexedKingdom);
-        annexedKingdom.RulingClan = null;
+        annexedKingdom.RulingClan = annexingKingdom.RulingClan;
     }
 }
