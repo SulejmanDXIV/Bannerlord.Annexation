@@ -1,4 +1,4 @@
-namespace DestroyKingdom.Shared;
+namespace Annexation.Shared;
 
 public static class SharedTexts
 {

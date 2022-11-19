@@ -1,12 +1,12 @@
-﻿using DestroyKingdom.Actions;
-using DestroyKingdom.Conditions;
-using DestroyKingdom.Extensions;
-using DestroyKingdom.Shared;
+﻿using Annexation.Actions;
+using Annexation.Conditions;
+using Annexation.Extensions;
+using Annexation.Shared;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace DestroyKingdom.CampaignBehaviors
+namespace Annexation.CampaignBehaviors
 {
     internal class AnnexationConversationCampaignBehavior : CampaignBehaviorBase
     {

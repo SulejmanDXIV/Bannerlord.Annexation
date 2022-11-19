@@ -1,19 +1,10 @@
-﻿using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.ComponentInterfaces;
-using TaleWorlds.CampaignSystem.GameComponents;
-using TaleWorlds.Core;
-using TaleWorlds.Library;
-using TaleWorlds.Localization;
-using TaleWorlds.MountAndBlade;
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using DestroyKingdom.CampaignBehaviors;
+﻿using Annexation.CampaignBehaviors;
 using JetBrains.Annotations;
-using TaleWorlds.CampaignSystem.Actions;
-using TaleWorlds.CampaignSystem.CampaignBehaviors;
+using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
+using TaleWorlds.MountAndBlade;
 
-namespace DestroyKingdom
+namespace Annexation
 {
     [UsedImplicitly]
     public class SubModule : MBSubModuleBase

@@ -7,7 +7,7 @@ using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 
-namespace DestroyKingdom.Extensions;
+namespace Annexation.Extensions;
 
 public static class TownExtensions
 {

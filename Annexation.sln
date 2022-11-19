@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33103.184
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Annexation/DestroyKingdom", "Annexation/DestroyKingdom.csproj", "{9ED7384E-02FE-45C0-9747-CB0EDE50D703}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Annexation", "Annexation\Annexation.csproj", "{9ED7384E-02FE-45C0-9747-CB0EDE50D703}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -4,7 +4,7 @@
 
 using TaleWorlds.CampaignSystem;
 
-namespace DestroyKingdom.Extensions;
+namespace Annexation.Extensions;
 
 public static class HeroExtensions
 {
