@@ -1,6 +1,9 @@
 <Tasks>
-    <CreateItem/>
+    <GetItem>
+        <ItemId Value="2890216380"/>
+    </GetItem>
     <UpdateItem>
+        <ChangeNotes Value="Fixed crashes during conversation with clanless or kingdomless NPCs" />
         <ModuleFolder Value="C:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\DestroyKingdom"/>
         <ItemDescription Value="Annexation"/>
         <Tags>

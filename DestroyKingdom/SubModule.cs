@@ -1,10 +1,10 @@
-﻿using Annexation.CampaignBehaviors;
+﻿using DestroyKingdom.CampaignBehaviors;
 using JetBrains.Annotations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 
-namespace Annexation
+namespace DestroyKingdom
 {
     [UsedImplicitly]
     public class SubModule : MBSubModuleBase

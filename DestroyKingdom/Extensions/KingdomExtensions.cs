@@ -5,7 +5,7 @@
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 
-namespace Annexation.Extensions;
+namespace DestroyKingdom.Extensions;
 
 public static class KingdomExtensions
 {

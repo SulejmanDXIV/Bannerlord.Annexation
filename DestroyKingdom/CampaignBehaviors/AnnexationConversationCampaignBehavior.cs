@@ -1,12 +1,12 @@
-﻿using Annexation.Actions;
-using Annexation.Conditions;
-using Annexation.Extensions;
-using Annexation.Shared;
+﻿using DestroyKingdom.Actions;
+using DestroyKingdom.Conditions;
+using DestroyKingdom.Extensions;
+using DestroyKingdom.Shared;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
-namespace Annexation.CampaignBehaviors
+namespace DestroyKingdom.CampaignBehaviors
 {
     internal class AnnexationConversationCampaignBehavior : CampaignBehaviorBase
     {
@@ -183,12 +183,13 @@ namespace Annexation.CampaignBehaviors
 
         private static void SetTextVariables()
         {
-            var hero = Hero.OneToOneConversationHero;
-            var player = Hero.MainHero;
+            var heroKingdom = Hero.OneToOneConversationHero.Clan?.Kingdom;
+            var playerKingdom = Hero.MainHero.Clan?.Kingdom;
+            if (heroKingdom == null || playerKingdom == null) return;
             MBTextManager.SetTextVariable("HERO_KINGDOM_TITLE", GetHeroFactionRulerText());
-            MBTextManager.SetTextVariable("PLAYER_KINGDOM", player.Clan.Kingdom.Name);
-            MBTextManager.SetTextVariable("HERO_KINGDOM", hero.Clan.Kingdom.Name);
-            MBTextManager.SetTextVariable("HERO_KINGDOM_CULTURE", hero.Clan.Kingdom.Culture.Name);
+            MBTextManager.SetTextVariable("PLAYER_KINGDOM", playerKingdom.Name);
+            MBTextManager.SetTextVariable("HERO_KINGDOM", heroKingdom.Name);
+            MBTextManager.SetTextVariable("HERO_KINGDOM_CULTURE", heroKingdom.Culture.Name);
         }
 
         private static bool PlayerNoTraitsCondition()
@@ -208,13 +209,16 @@ namespace Annexation.CampaignBehaviors
         {
             var playerGenderSuffix = Hero.MainHero.IsFemale ? "_f" : "";
             return GameTexts.FindText("str_faction_ruler",
-                Hero.OneToOneConversationHero.Clan.Kingdom.Culture.StringId + playerGenderSuffix);
+                Hero.OneToOneConversationHero.Clan?.Kingdom?.Culture?.StringId?.Add(playerGenderSuffix, false)
+            );
         }
 
         private static bool HeroKingdomStrengthClickableCondition(out TextObject? explanation)
         {
-            var heroKingdom = Hero.OneToOneConversationHero.Clan.Kingdom;
-            var playerKingdom = Hero.MainHero.Clan.Kingdom;
+            var heroKingdom = Hero.OneToOneConversationHero?.Clan?.Kingdom;
+            var playerKingdom = Hero.MainHero?.Clan?.Kingdom;
+            explanation = null;
+            if (heroKingdom == null || playerKingdom == null) return false;
             var strengthRatio = KingdomExtensions.KingdomsStrengthRatio(heroKingdom, playerKingdom);
             var enoughStrengthAdvantage = strengthRatio < 25;
             if (strengthRatio > 100)
@@ -223,29 +227,30 @@ namespace Annexation.CampaignBehaviors
                 explanation = new TextObject(
                     $"{heroKingdom.Name} has {strengthRatio}% of {playerKingdom.Name} strength. Needs to be less than 25%."
                 );
-            else
-                explanation = null;
             return enoughStrengthAdvantage;
         }
 
         private static bool PlayerControllingCultureTownsClickableCondition(out TextObject? explanation)
         {
-            var heroCulture = Hero.OneToOneConversationHero.Clan.Kingdom.Culture;
+            var heroCulture = Hero.OneToOneConversationHero?.Clan?.Kingdom.Culture;
+            var playerKingdom = Hero.MainHero?.Clan?.Kingdom;
+            explanation = null;
+            if (playerKingdom == null || heroCulture == null) return false;
             var playerControlledHeroCultureFiefsPercentage =
-                TownExtensions.KingdomControlledCultureFiefsPercentage(Hero.MainHero.Clan.Kingdom, heroCulture);
+                TownExtensions.KingdomControlledCultureFiefsPercentage(playerKingdom, heroCulture);
             var requiredFiefsPercentage = heroCulture.StringId == "empire" ? 45 : 40;
             var controllingEnoughFiefs = playerControlledHeroCultureFiefsPercentage >= requiredFiefsPercentage;
             if (!controllingEnoughFiefs)
                 explanation = new TextObject(
                     $"You are controlling {playerControlledHeroCultureFiefsPercentage}% of {heroCulture.Name} fiefs ({requiredFiefsPercentage}% required).");
-            else
-                explanation = null;
             return controllingEnoughFiefs;
         }
 
         private static bool HeroKingdomNoFiefsClickableCondition(out TextObject? explanation)
         {
-            var heroKingdom = Hero.OneToOneConversationHero.Clan.Kingdom;
+            var heroKingdom = Hero.OneToOneConversationHero?.Clan?.Kingdom;
+            explanation = null;
+            if (heroKingdom == null) return false;
             var fiefsCount = heroKingdom.Fiefs.Count;
             explanation = fiefsCount switch
             {
@@ -258,18 +263,21 @@ namespace Annexation.CampaignBehaviors
 
         private static bool PlayerIsRulerAndHeroIsRulerWithNoLordsCondition()
         {
-            SetTextVariables();
-            return Hero.OneToOneConversationHero.IsRulerOfKingdom()
-                   && Hero.MainHero.IsRulerOfKingdom()
-                   && Hero.OneToOneConversationHero.Clan.Kingdom.VassalClansCount() == 0;
+            var areRulers = Hero.OneToOneConversationHero.IsRulerOfKingdom()
+                            && Hero.MainHero.IsRulerOfKingdom()
+                            && Hero.OneToOneConversationHero.Clan?.Kingdom?.VassalClansCount() == 0;
+            if (areRulers) SetTextVariables();
+            return areRulers;
         }
 
         private static bool PlayerIsRulerAndHeroIsRulerWithLordsCondition()
         {
             SetTextVariables();
-            return Hero.OneToOneConversationHero.IsRulerOfKingdom()
-                   && Hero.MainHero.IsRulerOfKingdom()
-                   && !PlayerIsRulerAndHeroIsRulerWithNoLordsCondition();
+            var areRulers = Hero.OneToOneConversationHero.IsRulerOfKingdom()
+                            && Hero.MainHero.IsRulerOfKingdom()
+                            && !PlayerIsRulerAndHeroIsRulerWithNoLordsCondition();
+            if (areRulers) SetTextVariables();
+            return areRulers;
         }
     }
 }

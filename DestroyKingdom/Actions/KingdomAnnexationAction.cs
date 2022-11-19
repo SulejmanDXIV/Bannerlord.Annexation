@@ -4,7 +4,7 @@ using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.SceneInformationPopupTypes;
 using TaleWorlds.Core;
 
-namespace Annexation.Actions;
+namespace DestroyKingdom.Actions;
 
 internal static class KingdomAnnexationAction
 {

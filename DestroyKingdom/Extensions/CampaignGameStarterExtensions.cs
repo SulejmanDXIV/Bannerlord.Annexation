@@ -5,7 +5,7 @@
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Conversation;
 
-namespace Annexation.Extensions;
+namespace DestroyKingdom.Extensions;
 
 public static class CampaignGameStarterExtensions
 {

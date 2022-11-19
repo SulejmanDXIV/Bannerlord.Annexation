@@ -1,6 +1,6 @@
 using TaleWorlds.CampaignSystem;
 
-namespace Annexation.Conditions;
+namespace DestroyKingdom.Conditions;
 
 public static class PlayerTraitCondition
 {

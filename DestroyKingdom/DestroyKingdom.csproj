@@ -1,7 +1,7 @@
 <Project Sdk="Bannerlord.BUTRModule.Sdk/1.0.1.80">
 
   <PropertyGroup>
-    <Version>0.0.1</Version>
+    <Version>0.0.3</Version>
     <TargetFramework>net472</TargetFramework>
     <Platforms>x64</Platforms>
     <LangVersion>10.0</LangVersion>
@@ -10,6 +10,7 @@
     <ModuleId>$(MSBuildProjectName)</ModuleId>
     <ModuleName>$(MSBuildProjectName)</ModuleName>
     <GameFolder>C:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord</GameFolder>
+    <RootNamespace>DestroyKingdom</RootNamespace>
     <!-- Module manually override GameVersion -->
     <!-- <OverrideGameVersion>v1.0.0</OverrideGameVersion> -->
   </PropertyGroup>

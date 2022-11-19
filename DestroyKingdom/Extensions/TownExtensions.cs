@@ -7,7 +7,7 @@ using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 
-namespace Annexation.Extensions;
+namespace DestroyKingdom.Extensions;
 
 public static class TownExtensions
 {
@@ -15,7 +15,7 @@ public static class TownExtensions
     {
         var cultureFiefs = CultureFiefs(culture);
         var kingdomControlledCultureFiefs = cultureFiefs
-            .Where((fief) => fief.OwnerClan.Kingdom == kingdom).ToList();
+            .Where((fief) => fief.OwnerClan?.Kingdom == kingdom).ToList();
         return kingdomControlledCultureFiefs.Count() * 100 / cultureFiefs.Count;
     }
 
@@ -23,7 +23,7 @@ public static class TownExtensions
     public static List<Town> KingdomControlledCultureFiefs(Kingdom kingdom, CultureObject culture)
     {
         return CultureFiefs(culture)
-            .Where((fief) => fief.OwnerClan.Kingdom == kingdom).ToList();
+            .Where((fief) => fief.OwnerClan?.Kingdom == kingdom).ToList();
     }
 
     public static List<Town> CultureFiefs(CultureObject culture)
