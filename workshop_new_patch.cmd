@@ -1,0 +1,2 @@
+cd "C:\Program Files (x86)\Steam\steamapps\common\Mount & Blade II Bannerlord\bin\Win64_Shipping_Client"
+TaleWorlds.MountAndBlade.SteamWorkshop.exe C:\Users\UserX\source\repos\DestroyKingdom\workshop_task_new_patch.xml
