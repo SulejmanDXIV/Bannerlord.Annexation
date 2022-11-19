@@ -1,0 +1,8 @@
+<Tasks>
+    <GetItem>
+        <ItemId Value="2890216380"/>
+    </GetItem>
+    <UpdateItem>
+        <Image Value="C:\Users\UserX\source\repos\DestroyKingdom\workshop_image.png"/>
+    </UpdateItem>
+</Tasks>

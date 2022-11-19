@@ -1,0 +1,9 @@
+<Tasks>
+    <GetItem>
+        <ItemId Value="2890216380"/>
+    </GetItem>
+    <UpdateItem>
+        <ChangeNotes Value="" />
+        <ModuleFolder Value="C:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\DestroyKingdom"/>
+    </UpdateItem>
+</Tasks>
