@@ -1,0 +1,16 @@
+<Tasks>
+    <CreateItem/>
+    <UpdateItem>
+        <ModuleFolder Value="C:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\DestroyKingdom"/>
+        <ItemDescription Value="Annexation"/>
+        <Tags>
+            <Tag Value="Utility"/>
+            <Tag Value="Native"/>
+            <Tag Value="Singleplayer"/>
+            <Tag Value="Multiplayer"/>
+            <Tag Value="v1.0.2"/>
+        </Tags>
+        <Image Value="C:\Users\UserX\source\repos\DestroyKingdom\workshop_image.png"/>
+        <Visibility Value="Public"/>
+    </UpdateItem>
+</Tasks>
