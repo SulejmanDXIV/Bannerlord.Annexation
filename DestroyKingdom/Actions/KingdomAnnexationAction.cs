@@ -20,6 +20,7 @@ internal static class KingdomAnnexationAction
 
     public static void Apply(Kingdom annexedKingdom, Kingdom annexingKingdom, bool showNotification = true)
     {
+        var annexingLeader = annexingKingdom.Leader;
         List<Clan> annexedClans = new(annexedKingdom.Clans);
         foreach (var clan in annexedClans)
         {
@@ -47,7 +48,10 @@ internal static class KingdomAnnexationAction
             MakePeaceAction.Apply(annexedKingdom, annexingKingdom);
         }
 
-        DestroyKingdomAction.Apply(annexedKingdom);
-        annexedKingdom.RulingClan = annexingKingdom.RulingClan;
+        if (annexingLeader?.Clan?.Kingdom != annexedKingdom)
+        {
+            DestroyKingdomAction.Apply(annexedKingdom);
+            annexedKingdom.RulingClan = annexingKingdom.RulingClan;
+        }
     }
 }
