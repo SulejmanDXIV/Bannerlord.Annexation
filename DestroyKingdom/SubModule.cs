@@ -18,7 +18,8 @@ namespace DestroyKingdom
                 {
                     new PlayerRulerAnnexationConversationCampaignBehavior(),
                     new OtherRulersAnnexationCampaignBehavior(),
-                    new FixEmptyKingdomLeaderCampaignBehavior()
+                    new FixEmptyKingdomLeaderCampaignBehavior(),
+                    new UnionCampaignBehavior(),
                 };
                 foreach (var behavior in behaviors)
                 {
