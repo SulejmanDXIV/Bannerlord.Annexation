@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using NetworkMessages.FromServer;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.SceneInformationPopupTypes;
 using TaleWorlds.Core;
+using TaleWorlds.Localization;
 
 namespace DestroyKingdom.Actions;
 
@@ -26,15 +28,15 @@ internal static class KingdomAnnexationAction
         {
             if (clan.IsClanTypeMercenary)
             {
-                ChangeKingdomAction.ApplyByLeaveKingdomAsMercenary(clan, showNotification);
+                ChangeKingdomAction.ApplyByLeaveKingdomAsMercenary(clan, showNotification: false);
             }
             else if (clan.IsMinorFaction)
             {
-                ChangeKingdomAction.ApplyByLeaveKingdom(clan, showNotification);
+                ChangeKingdomAction.ApplyByLeaveKingdom(clan, showNotification: false);
             }
             else
             {
-                ChangeKingdomAction.ApplyByJoinToKingdom(clan, annexingKingdom, showNotification);
+                ChangeKingdomAction.ApplyByJoinToKingdom(clan, annexingKingdom, false);
                 if (showNotification && clan.Equals(annexedKingdom.RulingClan))
                 {
                     SceneNotificationData scene = new JoinKingdomSceneNotificationItem(clan, annexingKingdom);
@@ -52,6 +54,11 @@ internal static class KingdomAnnexationAction
         {
             DestroyKingdomAction.Apply(annexedKingdom);
             annexedKingdom.RulingClan = annexingKingdom.RulingClan;
+        }
+
+        if (showNotification)
+        {
+            MBInformationManager.AddQuickInformation(new TextObject($"{annexingKingdom} annexed {annexedKingdom}."));
         }
     }
 }
