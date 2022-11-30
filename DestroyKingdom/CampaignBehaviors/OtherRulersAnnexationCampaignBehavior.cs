@@ -1,6 +1,7 @@
 ﻿using DestroyKingdom.Actions;
 using DestroyKingdom.Conditions;
 using DestroyKingdom.Extensions;
+using DestroyKingdom.Shared;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 
@@ -33,9 +34,9 @@ namespace DestroyKingdom.CampaignBehaviors
 
         private static bool CanAnnexKingdom(Kingdom annexedKingdom, Kingdom annexingKingdom)
         {
-            var hasFiefs = annexingKingdom.Fiefs.Count > 0;
+            var hasFiefs = annexingKingdom.Fiefs.Count > Settings.AnnexedKingdomMaxFiefsAmount;
             var strengthRatio = KingdomExtensions.KingdomsStrengthRatio(annexedKingdom, annexingKingdom);
-            var isStronger = strengthRatio < KingdomAnnexationCondition.RequiredStrengthRatio;
+            var isStronger = strengthRatio < Settings.AnnexedKingdomMaxStrengthRatio;
             var isControllingEnoughLand = KingdomAnnexationCondition.ControllingEnoughCultureLands(
                 annexingKingdom: annexingKingdom,
                 annexedKingdom: annexedKingdom

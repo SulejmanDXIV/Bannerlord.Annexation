@@ -18,6 +18,7 @@ namespace DestroyKingdom.CampaignBehaviors
         private const string ThirdReasonToken = "annexation_give_third_reason";
         private const string AfterThirdReasonToken = "annexation_need_fourth_reason";
         private const string FourthReasonToken = "annexation_give_fourth_reason";
+        private const string OathStartToken = "annexation_oath";
 
         public override void RegisterEvents()
         {
@@ -31,19 +32,11 @@ namespace DestroyKingdom.CampaignBehaviors
         private static void AddDialogues(CampaignGameStarter starter)
         {
             starter.AddPlayerLine(
-                id: "annexation_demand_no_lords",
+                id: "annexation_demand",
                 inputToken: NativeGameTokens.HeroMainOptions,
                 outputToken: AnnexationRequestedToken,
-                text: "I demand you to recognize my authority as {HERO_KINGDOM_TITLE} of {HERO_KINGDOM_CULTURE}.",
-                condition: PlayerIsRulerAndHeroIsRulerWithNoLordsCondition
-            );
-            starter.AddPlayerLine(
-                id: "annexation_demand_lords",
-                inputToken: NativeGameTokens.HeroMainOptions,
-                outputToken: AnnexationRequestedToken,
-                text:
-                "I demand you and your lords to recognize my authority as {HERO_KINGDOM_TITLE} of {HERO_KINGDOM_CULTURE}.",
-                condition: PlayerIsRulerAndHeroIsRulerWithLordsCondition
+                text: "I demand you and {HERO_KINGDOM} to recognize my authority as {HERO_KINGDOM_TITLE} of {HERO_KINGDOM_CULTURE}.",
+                condition: PlayerIsRulerAndHeroIsRulerCondition
             );
             starter.AddDialogLine(
                 id: "annexation_ask_first_reason",
@@ -71,11 +64,11 @@ namespace DestroyKingdom.CampaignBehaviors
                 text: "That's true, but I would need more reasons for that kind of decision."
             );
             starter.AddPlayerLine(
-                id: "annexation_no_fiefs",
+                id: "annexation_low_fiefs",
                 inputToken: SecondReasonToken,
                 outputToken: AfterSecondReasonToken,
-                text: "{HERO_KINGDOM} does not control any fiefs.",
-                clickableCondition: HeroKingdomNoFiefsClickableCondition
+                text: "{HERO_KINGDOM} {LOW_FIEFS_DESCRIPTION}.",
+                clickableCondition: HeroKingdomLowFiefsClickableCondition
             );
             starter.AddPlayerLine(
                 id: "annexation_only_one_reason",
@@ -100,7 +93,7 @@ namespace DestroyKingdom.CampaignBehaviors
             starter.AddPlayerLine(
                 id: "annexation_fiefs_control_no_traits",
                 inputToken: ThirdReasonToken,
-                outputToken: "annexation_oath",
+                outputToken: OathStartToken,
                 text: "{PLAYER_KINGDOM} is controlling big part of {HERO_KINGDOM_CULTURE} lands.",
                 condition: PlayerNoTraitsCondition,
                 clickableCondition: PlayerControllingCultureTownsClickableCondition
@@ -119,28 +112,28 @@ namespace DestroyKingdom.CampaignBehaviors
             starter.AddPlayerLine(
                 id: "annexation_honor",
                 inputToken: FourthReasonToken,
-                outputToken: "annexation_oath",
+                outputToken: OathStartToken,
                 text: "You can trust my word - I will be taking care of the {HERO_KINGDOM_CULTURE}.",
                 condition: PlayerTraitCondition.Honorable
             );
             starter.AddPlayerLine(
                 id: "annexation_cruel",
                 inputToken: FourthReasonToken,
-                outputToken: "annexation_oath",
+                outputToken: OathStartToken,
                 text: "If you don't recognize my authority I will kill you and all your supporters.",
                 condition: PlayerTraitCondition.Cruel
             );
             starter.AddPlayerLine(
                 id: "annexation_generous",
                 inputToken: FourthReasonToken,
-                outputToken: "annexation_oath",
+                outputToken: OathStartToken,
                 text: "I will generously reward everyone who will be faithful to me.",
                 condition: PlayerTraitCondition.Generous
             );
             starter.AddPlayerLine(
                 id: "annexation_fearless",
                 inputToken: FourthReasonToken,
-                outputToken: "annexation_oath",
+                outputToken: OathStartToken,
                 text: "Many times I have shown my value as a fearless leader on the battlefields.",
                 condition: PlayerTraitCondition.Fearless
             );
@@ -152,7 +145,7 @@ namespace DestroyKingdom.CampaignBehaviors
             );
             starter.AddDialogLine(
                 id: "annexation_oath_text",
-                inputToken: "annexation_oath",
+                inputToken: OathStartToken,
                 outputToken: "annexation_oath_2",
                 text:
                 "This is hard decision, but after considering all circumstances that's the only thing that I can do."
@@ -186,10 +179,13 @@ namespace DestroyKingdom.CampaignBehaviors
             var heroKingdom = Hero.OneToOneConversationHero.Clan?.Kingdom;
             var playerKingdom = Hero.MainHero.Clan?.Kingdom;
             if (heroKingdom == null || playerKingdom == null) return;
+            var lowFiefsDescription = heroKingdom.Fiefs.IsEmpty() ? "does not control any fiefs" : "controls very few fiefs";
             MBTextManager.SetTextVariable("HERO_KINGDOM_TITLE", GetHeroFactionRulerText());
             MBTextManager.SetTextVariable("PLAYER_KINGDOM", playerKingdom.Name);
             MBTextManager.SetTextVariable("HERO_KINGDOM", heroKingdom.Name);
             MBTextManager.SetTextVariable("HERO_KINGDOM_CULTURE", heroKingdom.Culture.Name);
+            MBTextManager.SetTextVariable("LOW_FIEFS_DESCRIPTION", lowFiefsDescription);
+            
         }
 
         private static bool PlayerNoTraitsCondition()
@@ -220,12 +216,12 @@ namespace DestroyKingdom.CampaignBehaviors
             explanation = null;
             if (heroKingdom == null || playerKingdom == null) return false;
             var strengthRatio = KingdomExtensions.KingdomsStrengthRatio(heroKingdom, playerKingdom);
-            var enoughStrengthAdvantage = strengthRatio < KingdomAnnexationCondition.RequiredStrengthRatio;
+            var enoughStrengthAdvantage = strengthRatio < Settings.AnnexedKingdomMaxStrengthRatio;
             if (strengthRatio > 100)
                 explanation = new TextObject("{HERO_KINGDOM} is stronger than {PLAYER_KINGDOM}.");
             else if (!enoughStrengthAdvantage)
                 explanation = new TextObject(
-                    $"{heroKingdom.Name} has {strengthRatio}% of {playerKingdom.Name} strength. Needs to be less than 25%."
+                    $"{heroKingdom.Name} has {strengthRatio}% of {playerKingdom.Name} strength. Needs to be less than {Settings.AnnexedKingdomMaxStrengthRatio}%."
                 );
             return enoughStrengthAdvantage;
         }
@@ -250,36 +246,27 @@ namespace DestroyKingdom.CampaignBehaviors
             return controllingEnoughFiefs;
         }
 
-        private static bool HeroKingdomNoFiefsClickableCondition(out TextObject? explanation)
+        private static bool HeroKingdomLowFiefsClickableCondition(out TextObject? explanation)
         {
             var heroKingdom = Hero.OneToOneConversationHero?.Clan?.Kingdom;
             explanation = null;
             if (heroKingdom == null) return false;
             var fiefsCount = heroKingdom.Fiefs.Count;
-            explanation = fiefsCount switch
+            var maxFiefsCount = Settings.AnnexedKingdomMaxFiefsAmount;
+            var lowOnFiefs = fiefsCount <= maxFiefsCount;
+            if (!lowOnFiefs)
             {
-                1 => new TextObject($"{heroKingdom.Name} is controlling 1 fief."),
-                > 0 => new TextObject($"{heroKingdom.Name} is controlling {fiefsCount} fiefs."),
-                _ => null
-            };
-            return fiefsCount == 0;
+                explanation =
+                    new TextObject($"{heroKingdom.Name} is controlling {fiefsCount} fiefs (maximum {maxFiefsCount}).");
+            }
+
+            return lowOnFiefs;
         }
 
-        private static bool PlayerIsRulerAndHeroIsRulerWithNoLordsCondition()
+        private static bool PlayerIsRulerAndHeroIsRulerCondition()
         {
             var areRulers = Hero.OneToOneConversationHero.IsRulerOfKingdom()
-                            && Hero.MainHero.IsRulerOfKingdom()
-                            && Hero.OneToOneConversationHero.Clan?.Kingdom?.VassalClansCount() == 0;
-            if (areRulers) SetTextVariables();
-            return areRulers;
-        }
-
-        private static bool PlayerIsRulerAndHeroIsRulerWithLordsCondition()
-        {
-            SetTextVariables();
-            var areRulers = Hero.OneToOneConversationHero.IsRulerOfKingdom()
-                            && Hero.MainHero.IsRulerOfKingdom()
-                            && !PlayerIsRulerAndHeroIsRulerWithNoLordsCondition();
+                            && Hero.MainHero.IsRulerOfKingdom();
             if (areRulers) SetTextVariables();
             return areRulers;
         }

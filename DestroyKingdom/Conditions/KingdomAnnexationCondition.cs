@@ -1,14 +1,11 @@
 using DestroyKingdom.Extensions;
+using DestroyKingdom.Shared;
 using TaleWorlds.CampaignSystem;
 
 namespace DestroyKingdom.Conditions;
 
 public static class KingdomAnnexationCondition
 {
-    public const int RequiredStrengthRatio = 25;
-    private const int DefaultRequiredFiefsPercentage = 40;
-    private const int EmpireRequiredFiefsPercentage = 45;
-
     public static bool ControllingEnoughCultureLands(
         Kingdom? annexingKingdom,
         Kingdom? annexedKingdom
@@ -31,18 +28,14 @@ public static class KingdomAnnexationCondition
     {
         var annexedKingdomCulture = annexedKingdom?.Culture;
         controlledFiefsPercentage = 0;
-        requiredFiefsPercentage = DefaultRequiredFiefsPercentage;
+        requiredFiefsPercentage = Settings.AnnexingKingdomMinCultureFiefsPercentage;
         if (annexedKingdomCulture == null || annexingKingdom == null) return false;
         var controlledCultureFiefsPercentage = TownExtensions.KingdomControlledCultureFiefsPercentage(
             annexingKingdom,
             annexedKingdomCulture
         );
-        requiredFiefsPercentage = annexedKingdomCulture.StringId == "empire"
-            ? EmpireRequiredFiefsPercentage
-            : DefaultRequiredFiefsPercentage;
         var controllingEnoughFiefs = controlledCultureFiefsPercentage >= requiredFiefsPercentage;
-        if (!controllingEnoughFiefs)
-            controlledFiefsPercentage = controlledCultureFiefsPercentage;
+        controlledFiefsPercentage = controlledCultureFiefsPercentage;
         return controllingEnoughFiefs;
     }
 }
