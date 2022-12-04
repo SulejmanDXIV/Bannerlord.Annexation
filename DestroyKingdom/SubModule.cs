@@ -19,7 +19,8 @@ namespace DestroyKingdom
                 {
                     new PlayerRulerAnnexationConversationCampaignBehavior(),
                     new OtherRulersAnnexationCampaignBehavior(),
-                    new FixEmptyKingdomLeaderCampaignBehavior()
+                    new FixEmptyKingdomLeaderCampaignBehavior(),
+                    new SyncRebelClansStorageCampaignBehavior(),
                 };
                 foreach (var behavior in behaviors)
                 {
@@ -28,7 +29,7 @@ namespace DestroyKingdom
 
                 var models = new List<GameModel>
                 {
-                    new AnnexedKingdomRebelsExecutionRelationModel()
+                    new AnnexedKingdomRebelsExecutionRelationModel(),
                 };
                 foreach (var model in models)
                 {

@@ -10,12 +10,12 @@ public class AnnexedKingdomRebelsExecutionRelationModel : DefaultExecutionRelati
     {
         if (victim.Clan != null &&
             hero.Clan?.Kingdom != null &&
-            RebelClansStorage.Instance().IsRebelClanAgainstKingdom(victim.Clan, hero.Clan.Kingdom))
+            AnnexationRebelClansStorage.Instance?.IsRebelClanAgainstAnnexingKingdom(victim.Clan, hero.Clan.Kingdom) == true)
         {
             return base.GetRelationChangeForExecutingHero(victim, hero, out showQuickNotification) / 5;
         }
 
-        if (victim.Clan != null && RebelClansStorage.Instance().IsRebelClan(victim.Clan) && hero.Clan != victim.Clan)
+        if (victim.Clan != null && AnnexationRebelClansStorage.Instance?.IsAnnexationRebelClan(victim.Clan) == true && hero.Clan != victim.Clan)
         {
             return base.GetRelationChangeForExecutingHero(victim, hero, out showQuickNotification) / 3;
         }
