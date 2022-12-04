@@ -31,52 +31,38 @@ internal static class KingdomAnnexationAction
             annexedKingdom: annexedKingdom,
             annexingKingdom: annexingKingdom
         );
+        if (annexingKingdom.Leader == null ||
+            annexingKingdom.RulingClan == null ||
+            annexedKingdom.Leader == null ||
+            annexedKingdom.RulingClan == null) return;
         var orderedVassalClans = vassalClans.OrderByDescending(
-            clan => clan.GetRelationWithClan(annexingKingdom.RulingClan)
+            clan => clan.GetRelationWithClan(annexingKingdom.RulingClan) +
+                    clan.GetRelationWithClan(annexedKingdom.RulingClan)
         ).ToList();
         var clansCount = orderedVassalClans.Count;
         var collaboratingClansCount = Math.Max(1, clansCount * clansCollaborationChance / 100);
-        var oldRulerName = annexedKingdom.RulingClan.Leader.Name;
+        var oldRulerName = annexedKingdom.Leader.Name;
 
-        var uprisingKingdom = StartUprising(annexedKingdom, orderedVassalClans);
-        DeclareWarAction.Apply(uprisingKingdom, annexingKingdom);
-        AssignCollaboratorsAndInsurgents(annexingKingdom,
+        HandleCollaboratorsAndRebels(
+            annexingKingdom,
             clansCount,
             orderedVassalClans,
-            collaboratingClansCount,
-            uprisingKingdom
+            collaboratingClansCount
         );
         HandleNonVassalClans(annexedKingdom, annexingKingdom, showNotification, annexedClans);
         MakePeace(annexedKingdom, annexingKingdom);
         DestroyOldKingdom(annexedKingdom, annexingKingdom, annexingLeader);
-        HandleNotifications(annexedKingdom, annexingKingdom, showNotification, oldRulerName, collaboratingClansCount,
-            vassalClans, uprisingKingdom);
-    }
-
-    private static void HandleNotifications(
-        Kingdom annexedKingdom,
-        Kingdom annexingKingdom,
-        bool showNotification,
-        TextObject oldRulerName,
-        int collaboratingClansCount,
-        IReadOnlyCollection<Clan> vassalClans,
-        Kingdom uprisingKingdom
-    )
-    {
         if (showNotification)
         {
             MBInformationManager.AddQuickInformation(new TextObject(
                 $"{annexingKingdom} annexed {annexedKingdom}. {oldRulerName} and {collaboratingClansCount} out of {vassalClans.Count} vassal clans decided to collaborate.")
-            );
-            MBInformationManager.AddQuickInformation(new TextObject(
-                $"{uprisingKingdom.Leader} is leading ${uprisingKingdom.Name} and {uprisingKingdom.Clans.Count} joined him.")
             );
         }
     }
 
     private static void DestroyOldKingdom(Kingdom annexedKingdom, Kingdom annexingKingdom, Hero annexingLeader)
     {
-        if (annexingLeader?.Clan?.Kingdom != annexedKingdom)
+        if (annexingLeader.Clan?.Kingdom != annexedKingdom)
         {
             DestroyKingdomAction.Apply(annexedKingdom);
             annexedKingdom.RulingClan = annexingKingdom.RulingClan;
@@ -120,32 +106,29 @@ internal static class KingdomAnnexationAction
         }
     }
 
-    private static void AssignCollaboratorsAndInsurgents(
+    private static void HandleCollaboratorsAndRebels(
         Kingdom annexingKingdom,
         int clansCount,
         IReadOnlyList<Clan> orderedVassalClans,
-        int collaboratingClansCount,
-        Kingdom uprisingKingdom)
+        int collaboratingClansCount
+    )
     {
         for (var index = 0; index < clansCount; index++)
         {
-            ChangeKingdomAction.ApplyByJoinToKingdom(
-                clan: orderedVassalClans[index],
-                newKingdom: index < collaboratingClansCount ? annexingKingdom : uprisingKingdom,
-                showNotification: false
-            );
+            var clan = orderedVassalClans[index];
+            if (index < collaboratingClansCount)
+            {
+                ChangeKingdomAction.ApplyByJoinToKingdom(
+                    clan: clan,
+                    newKingdom: annexingKingdom,
+                    showNotification: false
+                );
+            }
+            else
+            {
+                ChangeKingdomAction.ApplyByLeaveKingdom(clan, showNotification: false);
+                DeclareWarAction.Apply(clan, annexingKingdom);
+            }
         }
-    }
-
-    private static Kingdom StartUprising(Kingdom annexedKingdom, IReadOnlyCollection<Clan> orderedVassalClans)
-    {
-        Campaign.Current.KingdomManager.CreateKingdom(
-            new TextObject($"{annexedKingdom.Name} Uprising"),
-            new TextObject($"{annexedKingdom.Name} Uprising"),
-            annexedKingdom.Culture,
-            orderedVassalClans.Last(),
-            initialPolicies: annexedKingdom.ActivePolicies.ToList()
-        );
-        return orderedVassalClans.Last().Kingdom;
     }
 }

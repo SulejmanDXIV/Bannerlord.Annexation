@@ -16,9 +16,15 @@ public static class ClansCollaborationChanceCalculator
         if (annexingKingdomRulingClan == null) return 0;
 
         var averageRelation = annexedKingdom.VassalClans()
-            .Sum(clan => clan.GetRelationWithClan(annexingKingdomRulingClan)) / annexedKingdom.VassalClans().Count;
+            .Sum(clan => AverageRelationWithRulers(clan, annexedKingdom, annexingKingdom));
         var averageRelationWithOffset = Math.Max(averageRelation + 50, 0);
         var relationFactor = (float)averageRelationWithOffset / 150;
         return (int)(BaseValue + RelationFactorRange * relationFactor);
+    }
+
+    private static int AverageRelationWithRulers(Clan clan, Kingdom annexedKingdom, Kingdom annexingKingdom)
+    {
+        return (clan.GetRelationWithClan(annexedKingdom.RulingClan) +
+                clan.GetRelationWithClan(annexingKingdom.RulingClan)) / 2 / annexedKingdom.VassalClans().Count;
     }
 }
