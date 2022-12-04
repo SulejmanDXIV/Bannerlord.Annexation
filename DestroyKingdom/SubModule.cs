@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using DestroyKingdom.CampaignBehaviors;
+using DestroyKingdom.Model;
 using JetBrains.Annotations;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -23,6 +24,15 @@ namespace DestroyKingdom
                 foreach (var behavior in behaviors)
                 {
                     ((CampaignGameStarter)gameStarterObject).AddBehavior(behavior);
+                }
+
+                var models = new List<GameModel>
+                {
+                    new AnnexedKingdomRebelsExecutionRelationModel()
+                };
+                foreach (var model in models)
+                {
+                    ((CampaignGameStarter)gameStarterObject).AddModel(model);
                 }
             }
         }

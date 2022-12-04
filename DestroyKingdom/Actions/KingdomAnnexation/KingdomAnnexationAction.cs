@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using DestroyKingdom.Data;
 using DestroyKingdom.Extensions;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
@@ -126,7 +127,8 @@ internal static class KingdomAnnexationAction
             }
             else
             {
-                ChangeKingdomAction.ApplyByLeaveKingdom(clan, showNotification: false);
+                ChangeKingdomAction.ApplyByLeaveWithRebellionAgainstKingdom(clan, showNotification: false);
+                RebelClansStorage.Instance().AddRebelClan(clan, annexingKingdom);
                 DeclareWarAction.Apply(clan, annexingKingdom);
             }
         }
