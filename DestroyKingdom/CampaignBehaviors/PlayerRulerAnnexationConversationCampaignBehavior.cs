@@ -1,4 +1,4 @@
-﻿using DestroyKingdom.Actions;
+﻿using DestroyKingdom.Actions.KingdomAnnexation;
 using DestroyKingdom.Conditions;
 using DestroyKingdom.Extensions;
 using DestroyKingdom.Shared;

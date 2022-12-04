@@ -1,7 +1,7 @@
 <Project Sdk="Bannerlord.BUTRModule.Sdk/1.0.1.80">
 
   <PropertyGroup>
-    <Version>0.2.0</Version>
+    <Version>0.3.0</Version>
     <TargetFramework>net472</TargetFramework>
     <Platforms>x64</Platforms>
     <LangVersion>10.0</LangVersion>
