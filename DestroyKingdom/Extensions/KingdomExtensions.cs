@@ -11,9 +11,9 @@ public static class KingdomExtensions
         return Kingdom.All.Where((kingdom) => kingdom.IsKingdomFaction && !kingdom.IsEliminated).ToList();
     }
 
-    public static int VassalClansCount(this Kingdom kingdom)
+    public static List<Clan> VassalClans(this Kingdom kingdom)
     {
-        return kingdom.Clans.Count((clan) => clan.IsNoble) - 1;
+        return kingdom.Clans.Where(clan => clan.IsNoble && clan != kingdom.RulingClan && !clan.IsEliminated).ToList();
     }
 
     public static int KingdomsStrengthRatio(Kingdom kingdom, Kingdom other)
