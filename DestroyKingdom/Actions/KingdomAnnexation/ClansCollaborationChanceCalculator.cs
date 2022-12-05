@@ -1,15 +1,13 @@
 using System;
 using System.Linq;
 using DestroyKingdom.Extensions;
+using DestroyKingdom.Shared;
 using TaleWorlds.CampaignSystem;
 
 namespace DestroyKingdom.Actions.KingdomAnnexation;
 
 public static class ClansCollaborationChanceCalculator
 {
-    private const int BaseValue = 10;
-    private const int RelationFactorRange = 40;
-
     public static int GetChance(Kingdom annexedKingdom, Kingdom annexingKingdom)
     {
         var annexingKingdomRulingClan = annexingKingdom.RulingClan;
@@ -19,7 +17,10 @@ public static class ClansCollaborationChanceCalculator
             .Sum(clan => AverageRelationWithRulers(clan, annexedKingdom, annexingKingdom));
         var averageRelationWithOffset = Math.Max(averageRelation + 50, 0);
         var relationFactor = (float)averageRelationWithOffset / 150;
-        return (int)(BaseValue + RelationFactorRange * relationFactor);
+        var relationFactorRange = Settings.MaximumCollaborationChance >= Settings.MinimumCollaborationChance
+            ? Settings.MaximumCollaborationChance - Settings.MinimumCollaborationChance
+            : 0;
+        return (int)(Settings.MinimumCollaborationChance + relationFactorRange * relationFactor);
     }
 
     private static int AverageRelationWithRulers(Clan clan, Kingdom annexedKingdom, Kingdom annexingKingdom)

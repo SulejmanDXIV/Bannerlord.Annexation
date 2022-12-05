@@ -1,4 +1,5 @@
 using DestroyKingdom.Data;
+using DestroyKingdom.Shared;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 
@@ -10,14 +11,24 @@ public class AnnexedKingdomRebelsExecutionRelationModel : DefaultExecutionRelati
     {
         if (victim.Clan != null &&
             hero.Clan?.Kingdom != null &&
-            AnnexationRebelClansStorage.Instance?.IsRebelClanAgainstAnnexingKingdom(victim.Clan, hero.Clan.Kingdom) == true)
+            true == AnnexationRebelClansStorage.Instance?.IsRebelClanAgainstAnnexingKingdom(
+                victim.Clan,
+                hero.Clan.Kingdom
+            ))
         {
-            return base.GetRelationChangeForExecutingHero(victim, hero, out showQuickNotification) / 5;
+            var denominator = Settings.RebelExecutionRelationPenaltyDenominatorAnnexing;
+            return base.GetRelationChangeForExecutingHero(victim, hero, out showQuickNotification) / denominator;
         }
 
-        if (victim.Clan != null && AnnexationRebelClansStorage.Instance?.IsAnnexationRebelClan(victim.Clan) == true && hero.Clan != victim.Clan)
+        if (victim.Clan != null &&
+            hero.Clan != null &&
+            true == AnnexationRebelClansStorage.Instance?.IsAnnexationRebelClan(victim.Clan) &&
+            !AnnexationRebelClansStorage.Instance.IsAnnexationRebelClan(hero.Clan) &&
+            hero.Clan != victim.Clan
+           )
         {
-            return base.GetRelationChangeForExecutingHero(victim, hero, out showQuickNotification) / 3;
+            var denominator = Settings.RebelExecutionRelationPenaltyDenominatorOthers;
+            return base.GetRelationChangeForExecutingHero(victim, hero, out showQuickNotification) / denominator;
         }
 
         return base.GetRelationChangeForExecutingHero(victim, hero, out showQuickNotification);

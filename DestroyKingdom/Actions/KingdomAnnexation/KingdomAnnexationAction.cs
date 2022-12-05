@@ -127,7 +127,7 @@ internal static class KingdomAnnexationAction
             }
             else
             {
-                ChangeKingdomAction.ApplyByLeaveWithRebellionAgainstKingdom(clan, showNotification: false);
+                ChangeKingdomAction.ApplyByLeaveKingdom(clan, showNotification: false);
                 AnnexationRebelClansStorage.Instance?.AddAnnexationRebelClan(clan, annexingKingdom);
                 DeclareWarAction.Apply(clan, annexingKingdom);
             }
