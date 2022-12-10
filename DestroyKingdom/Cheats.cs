@@ -43,7 +43,10 @@ public class Cheats
                 .ToList();
         foreach (var clan in kingdomlessClans)
         {
-            MakePeaceAction.Apply(clan, kingdom);
+            if (clan.GetStanceWith(kingdom).IsAtWar)
+            {
+                MakePeaceAction.Apply(clan, kingdom);
+            }
             ChangeKingdomAction.ApplyByJoinToKingdom(clan, kingdom);
         }
 
@@ -75,7 +78,10 @@ public class Cheats
             return $"Couldn't find clan with {strings[1]} name. {VassalizeClanInfo}";
         }
 
-        MakePeaceAction.Apply(clan, kingdom);
+        if (clan.GetStanceWith(kingdom).IsAtWar)
+        {
+            MakePeaceAction.Apply(clan, kingdom);
+        }
         ChangeKingdomAction.ApplyByJoinToKingdom(clan, kingdom);
         return $"{clan.Name} clan joined {kingdom.Name}.";
     }

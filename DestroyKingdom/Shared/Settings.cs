@@ -57,8 +57,8 @@ internal class Settings : AttributeGlobalSettings<Settings>
 
     [SettingPropertyFloatingInteger(
         displayName: "Minimum culture fiefs",
-        minValue: .25f,
-        maxValue: .7f,
+        minValue: .0f,
+        maxValue: 1f,
         valueFormat: "0%",
         Order = 2,
         RequireRestart = false,

@@ -97,10 +97,14 @@ internal static class KingdomAnnexationAction
             }
             else
             {
-                if (showNotification && clan.Equals(annexedKingdom.RulingClan))
+                if (clan.Equals(annexedKingdom.RulingClan))
                 {
-                    SceneNotificationData scene = new JoinKingdomSceneNotificationItem(clan, annexingKingdom);
-                    MBInformationManager.ShowSceneNotification(scene);
+                    if (showNotification)
+                    {
+                        SceneNotificationData scene = new JoinKingdomSceneNotificationItem(clan, annexingKingdom);
+                        MBInformationManager.ShowSceneNotification(scene);
+                    }
+
                     ChangeKingdomAction.ApplyByJoinToKingdom(clan, annexingKingdom, false);
                 }
             }
