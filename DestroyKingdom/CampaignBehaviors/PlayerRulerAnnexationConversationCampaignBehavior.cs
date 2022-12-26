@@ -35,20 +35,20 @@ namespace DestroyKingdom.CampaignBehaviors
                 id: "annexation_demand",
                 inputToken: NativeGameTokens.HeroMainOptions,
                 outputToken: AnnexationRequestedToken,
-                text: "I demand you and {HERO_KINGDOM} to recognize my authority as {HERO_KINGDOM_TITLE} of {HERO_KINGDOM_CULTURE}.",
+                text: "I, the rightful {PLAYER_KINGDOM_TITLE} of {PLAYER_KINGDOM}, request that you and {HERO_KINGDOM} acknowledge my sovereignty as {HERO_KINGDOM_TITLE} of {HERO_KINGDOM_CULTURE}.",
                 condition: PlayerIsRulerAndHeroIsRulerCondition
             );
             starter.AddDialogLine(
                 id: "annexation_ask_first_reason",
                 inputToken: AnnexationRequestedToken,
                 outputToken: FirstReasonToken,
-                text: "And why should I do that?"
+                text: "What is your reasoning for this request?"
             );
             starter.AddPlayerLine(
                 id: "annexation_strength",
                 inputToken: FirstReasonToken,
                 outputToken: AfterFirstReasonToken,
-                text: "{PLAYER_KINGDOM} is far stronger than {HERO_KINGDOM}.",
+                text: "{PLAYER_KINGDOM} holds a position of strength, and it would be in your best interest to align with us rather than risk our hostility.",
                 clickableCondition: HeroKingdomStrengthClickableCondition
             );
             starter.AddPlayerLine(
@@ -61,7 +61,7 @@ namespace DestroyKingdom.CampaignBehaviors
                 id: "annexation_ask_second_reason",
                 inputToken: AfterFirstReasonToken,
                 outputToken: SecondReasonToken,
-                text: "That's true, but I would need more reasons for that kind of decision."
+                text: "While I cannot deny the power of {PLAYER_KINGDOM}, I require further persuasion before making such a significant decision."
             );
             starter.AddPlayerLine(
                 id: "annexation_low_fiefs",
@@ -80,13 +80,13 @@ namespace DestroyKingdom.CampaignBehaviors
                 id: "annexation_ask_third_reason",
                 inputToken: AfterSecondReasonToken,
                 outputToken: ThirdReasonToken,
-                text: "But why should YOU be the one to rule {HERO_KINGDOM_CULTURE} people?"
+                text: "But why should you, specifically, be the one to rule over the {HERO_KINGDOM_CULTURE} people?"
             );
             starter.AddPlayerLine(
                 id: "annexation_fiefs_control",
                 inputToken: ThirdReasonToken,
                 outputToken: AfterThirdReasonToken,
-                text: "{PLAYER_KINGDOM} is controlling big part of {HERO_KINGDOM_CULTURE} lands.",
+                text: "{PLAYER_KINGDOM} holds a large portion of {HERO_KINGDOM_CULTURE} lands under its control.",
                 condition: PlayerAnyTraitsCondition,
                 clickableCondition: PlayerControllingCultureTownsClickableCondition
             );
@@ -94,7 +94,7 @@ namespace DestroyKingdom.CampaignBehaviors
                 id: "annexation_fiefs_control_no_traits",
                 inputToken: ThirdReasonToken,
                 outputToken: OathStartToken,
-                text: "{PLAYER_KINGDOM} is controlling big part of {HERO_KINGDOM_CULTURE} lands.",
+                text: "{PLAYER_KINGDOM} holds a large portion of {HERO_KINGDOM_CULTURE} lands under its control.",
                 condition: PlayerNoTraitsCondition,
                 clickableCondition: PlayerControllingCultureTownsClickableCondition
             );
@@ -107,34 +107,34 @@ namespace DestroyKingdom.CampaignBehaviors
                 id: "annexation_ask_fourth_reason",
                 inputToken: AfterThirdReasonToken,
                 outputToken: FourthReasonToken,
-                text: "Go on."
+                text: "Please continue."
             );
             starter.AddPlayerLine(
                 id: "annexation_honor",
                 inputToken: FourthReasonToken,
                 outputToken: OathStartToken,
-                text: "You can trust my word - I will be taking care of the {HERO_KINGDOM_CULTURE}.",
+                text: "You may trust in my word - the prosperity of the {HERO_KINGDOM_CULTURE} will be my foremost concern.",
                 condition: PlayerTraitCondition.Honorable
             );
             starter.AddPlayerLine(
                 id: "annexation_cruel",
                 inputToken: FourthReasonToken,
                 outputToken: OathStartToken,
-                text: "If you don't recognize my authority I will kill you and all your supporters.",
+                text: "Should you refuse to acknowledge my rightful rule, I shall see to it that you and all your supporters meet their demise.",
                 condition: PlayerTraitCondition.Cruel
             );
             starter.AddPlayerLine(
                 id: "annexation_generous",
                 inputToken: FourthReasonToken,
                 outputToken: OathStartToken,
-                text: "I will generously reward everyone who will be faithful to me.",
+                text: "I shall generously reward those who remain loyal to me.",
                 condition: PlayerTraitCondition.Generous
             );
             starter.AddPlayerLine(
                 id: "annexation_fearless",
                 inputToken: FourthReasonToken,
                 outputToken: OathStartToken,
-                text: "Many times I have shown my value as a fearless leader on the battlefields.",
+                text: "I have proven myself a valiant and fearless leader on numerous occasions on the fields of battle.",
                 condition: PlayerTraitCondition.Fearless
             );
             starter.AddPlayerLine(
@@ -148,7 +148,7 @@ namespace DestroyKingdom.CampaignBehaviors
                 inputToken: OathStartToken,
                 outputToken: "annexation_oath_2",
                 text:
-                "This is hard decision, but after considering all circumstances that's the only thing that I can do."
+                "This is a difficult decision, but after careful consideration of all the circumstances, it is the only course of action available to me."
             );
             starter.AddDialogLine(
                 id: "annexation_oath_text_2",
@@ -179,8 +179,9 @@ namespace DestroyKingdom.CampaignBehaviors
             var heroKingdom = Hero.OneToOneConversationHero.Clan?.Kingdom;
             var playerKingdom = Hero.MainHero.Clan?.Kingdom;
             if (heroKingdom == null || playerKingdom == null) return;
-            var lowFiefsDescription = heroKingdom.Fiefs.IsEmpty() ? "does not control any fiefs" : "controls very few fiefs";
-            MBTextManager.SetTextVariable("HERO_KINGDOM_TITLE", GetHeroFactionRulerText());
+            var lowFiefsDescription = heroKingdom.Fiefs.IsEmpty() ? "holds no fiefdoms in its control" : "holds control over a negligible amount of fiefdoms";
+            MBTextManager.SetTextVariable("PLAYER_KINGDOM_TITLE", GetHeroFactionRulerText(Hero.MainHero.Clan?.Kingdom));
+            MBTextManager.SetTextVariable("HERO_KINGDOM_TITLE", GetHeroFactionRulerText(Hero.OneToOneConversationHero.Clan?.Kingdom));
             MBTextManager.SetTextVariable("PLAYER_KINGDOM", playerKingdom.Name);
             MBTextManager.SetTextVariable("HERO_KINGDOM", heroKingdom.Name);
             MBTextManager.SetTextVariable("HERO_KINGDOM_CULTURE", heroKingdom.Culture.Name);
@@ -201,11 +202,11 @@ namespace DestroyKingdom.CampaignBehaviors
                    PlayerTraitCondition.Honorable();
         }
 
-        private static TextObject GetHeroFactionRulerText()
+        private static TextObject GetHeroFactionRulerText(IFaction? kingdom)
         {
             var playerGenderSuffix = Hero.MainHero.IsFemale ? "_f" : "";
             return GameTexts.FindText("str_faction_ruler",
-                Hero.OneToOneConversationHero.Clan?.Kingdom?.Culture?.StringId?.Add(playerGenderSuffix, false)
+                kingdom?.Culture?.StringId?.Add(playerGenderSuffix, false)
             );
         }
 
