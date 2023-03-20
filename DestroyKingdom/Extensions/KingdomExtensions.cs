@@ -8,7 +8,7 @@ public static class KingdomExtensions
 {
     public static List<Kingdom> AllActiveKingdomsFactions()
     {
-        return Kingdom.All.Where((kingdom) => kingdom.IsKingdomFaction && !kingdom.IsEliminated).ToList();
+        return Kingdom.All.Where((kingdom) => !kingdom.IsEliminated).ToList();
     }
 
     public static List<Clan> VassalClans(this Kingdom kingdom)
