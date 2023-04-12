@@ -9,14 +9,14 @@ namespace DestroyKingdom.Shared;
 [SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Local")]
 internal class Settings : AttributeGlobalSettings<Settings>
 {
-    private const string GroupNameAnnexationConditions = "Annexation conditions";
+    private const string GroupNameAnnexationConditions = "İlhak Etme Koşulu";
     private const int DefaultAnnexedKingdomMaxFiefsAmounts = 0;
     private const float DefaultAnnexedKingdomMaxStrengthRatio = .25f;
     private const float DefaultAnnexingKingdomMinCultureFiefsPercentage = .4f;
-    private const string GroupNameReducedExecutionRelationshipPenalty = "Reduced rebel execution relationship penalty";
+    private const string GroupNameReducedExecutionRelationshipPenalty = "İnfaz Sonucunda İlişki Cezası Oranı";
     private const int DefaultRebelExecutionRelationPenaltyDenominatorAnnexing = 5;
     private const int DefaultRebelExecutionRelationPenaltyDenominatorOthers = 3;
-    private const string GroupNameCollaborationChances = "Chances of collaboration";
+    private const string GroupNameCollaborationChances = "Karşı Tarafla Anlaşma Şansı";
     private const float DefaultMinimumCollaborationChance = .1f;
     private const float DefaultMaximumCollaborationChance = .5f;
     public override string Id => "Annexation_Settings";
@@ -25,12 +25,12 @@ internal class Settings : AttributeGlobalSettings<Settings>
     public override string FormatType => "json2";
 
     [SettingPropertyInteger(
-        displayName: "Maximum amount of fiefs of annexed kingdom",
+        displayName: "İlhak edilmiş krallığın en fazla tımar miktarı",
         minValue: 0,
         maxValue: 5,
         Order = 0,
         RequireRestart = false,
-        HintText = "Kingdom can be annexed only if it has less fiefs than configured by this value"
+        HintText = "Krallık, yalnızca bu değerden daha az tımara sahipse ilhak edilebilir."
     )]
     [SettingPropertyGroup(GroupNameAnnexationConditions)]
     private int AnnexedKingdomMaxFiefsAmountInternal { get; set; } = DefaultAnnexedKingdomMaxFiefsAmounts;
@@ -39,14 +39,14 @@ internal class Settings : AttributeGlobalSettings<Settings>
         Instance?.AnnexedKingdomMaxFiefsAmountInternal ?? DefaultAnnexedKingdomMaxFiefsAmounts;
 
     [SettingPropertyFloatingInteger(
-        displayName: "Maximum relative strength percentage of annexed kingdom",
+        displayName: "İlhak edilmiş krallığın maksimum güç yüzdesi",
         minValue: .1f,
         maxValue: .5f,
         valueFormat: "0%",
         Order = 1,
         RequireRestart = false,
         HintText =
-            "Kingdom can be annexed only if it it's total strength divided by your annexing kingdom strength is smaller than this value"
+            "İlhak edilmek istenen bir krallık, yalnızca ilhak etmeye çalışan krallığın gücüne bölündüğünde belirli bir değerden daha küçükse ilhak edilebilir."
     )]
     [SettingPropertyGroup(GroupNameAnnexationConditions)]
     private float AnnexedKingdomMaxStrengthRatioInternal { get; set; } = DefaultAnnexedKingdomMaxStrengthRatio;
@@ -56,14 +56,14 @@ internal class Settings : AttributeGlobalSettings<Settings>
     );
 
     [SettingPropertyFloatingInteger(
-        displayName: "Minimum culture fiefs",
+        displayName: "Size ait olan minimum tımar",
         minValue: .0f,
         maxValue: 1f,
         valueFormat: "0%",
         Order = 2,
         RequireRestart = false,
         HintText =
-            "Kingdom can annex other kingdom only if percentage of fiefs that have annexed kingdom's culture controlled by this annexing kingdom is at least as big as this value"
+            "Bir krallık, diğer bir krallığı ilhak etmek istiyorsa, ilhak etmeye çalışan krallığın kontrolündeki tımar yüzdesinin belirli bir değerin altında olmaması gerekiyor."
     )]
     [SettingPropertyGroup(GroupNameAnnexationConditions)]
     private float AnnexingKingdomMinCultureFiefsPercentageInternal { get; set; } =
@@ -75,13 +75,13 @@ internal class Settings : AttributeGlobalSettings<Settings>
     );
 
     [SettingPropertyInteger(
-        displayName: "Execution relation penalty denominator (annexing kingdom)",
+        displayName: "İlhak edilen krallığa karşı yapılan infazın ilişki cezası oranı",
         minValue: 1,
         maxValue: 10,
         Order = 3,
         RequireRestart = false,
         HintText =
-            "Relation penalty with nobles of annexing kingdom after executing rebel nobles of annexed kingdom will be divided by this number"
+            "İlhak edilen krallığın isyancı soylularının infazından sonra, ilhak eden krallığın soylularıyla olan ilişki cezası bu orana göre hesaplanacaktır."
     )]
     [SettingPropertyGroup(GroupNameReducedExecutionRelationshipPenalty)]
     private int RebelExecutionRelationPenaltyDenominatorAnnexingInternal { get; set; } =
@@ -92,13 +92,13 @@ internal class Settings : AttributeGlobalSettings<Settings>
         DefaultRebelExecutionRelationPenaltyDenominatorAnnexing;
 
     [SettingPropertyInteger(
-        displayName: "Execution relation penalty denominator (other kingdoms)",
+        displayName: "Diğer krallıklara karşı yapılan infazın ilişki cezası oranı",
         minValue: 1,
         maxValue: 10,
         Order = 4,
         RequireRestart = false,
         HintText =
-            "Relation penalty with nobles of other kingdoms after executing rebel nobles of annexed kingdom will be divided by this number"
+            "İlhak edilen krallığın isyancı soylularının infaz edilmesinden sonra, diğer krallıkların soylularıyla olan ilişki cezaları bu sayıya göre hesaplanacaktır."
     )]
     [SettingPropertyGroup(GroupNameReducedExecutionRelationshipPenalty)]
     private int RebelExecutionRelationPenaltyDenominatorOthersInternal { get; set; } =
@@ -109,14 +109,14 @@ internal class Settings : AttributeGlobalSettings<Settings>
         DefaultRebelExecutionRelationPenaltyDenominatorOthers;
 
     [SettingPropertyFloatingInteger(
-        displayName: "Minimum chance of collaboration",
+        displayName: "Minimum anlaşma şansı",
         minValue: .1f,
         maxValue: 1f,
         valueFormat: "0%",
         Order = 5,
         RequireRestart = false,
         HintText =
-            "Minimum chance of vassal clans of annexed kingdom to join your kingdom after annexation (doesn't apply to ruler which will always join and mercenaries that will just terminate their contract)."
+            "İşgal edilen krallığın vasal klanları, ilhak işleminden sonra senin krallığına katılma olasılığı düşüktür (ilhak edilen yönetici dışında her zaman ve sözleşmeleri sona erecek olan paralı askerler hariç)."
     )]
     [SettingPropertyGroup(GroupNameCollaborationChances)]
     private float MinimumCollaborationChanceInternal { get; set; } = DefaultMinimumCollaborationChance;
@@ -126,14 +126,14 @@ internal class Settings : AttributeGlobalSettings<Settings>
     );
 
     [SettingPropertyFloatingInteger(
-        displayName: "Maximum chance of collaboration",
+        displayName: "Maksimum anlaşma şansı",
         minValue: .1f,
         maxValue: 1f,
         valueFormat: "0%",
         Order = 6,
         RequireRestart = false,
         HintText =
-            "Maximum chance of vassal clans of annexed kingdom to join your kingdom after annexation - the better your relations with lords of the kingdom are, the higher the chance they will join you. This value will be ignored if it's lower than minimum one."
+            "İlhak edilen krallığın vassal klanlarının sizin krallığınıza katılma olasılığı maksimum değeri - krallarla olan ilişkilerinizin ne kadar iyi olduğuna bağlı olarak, katılma ihtimalleri de artacaktır. Bu özellik, minimum değerin altındaysa dikkate alınmayacaktır."
     )]
     [SettingPropertyGroup(GroupNameCollaborationChances)]
     private float MaximumCollaborationChanceInternal { get; set; } = DefaultMaximumCollaborationChance;
