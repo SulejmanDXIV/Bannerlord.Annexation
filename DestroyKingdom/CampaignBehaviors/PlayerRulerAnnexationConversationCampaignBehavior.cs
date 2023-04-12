@@ -35,33 +35,33 @@ namespace DestroyKingdom.CampaignBehaviors
                 id: "annexation_demand",
                 inputToken: NativeGameTokens.HeroMainOptions,
                 outputToken: AnnexationRequestedToken,
-                text: "I demand you and {HERO_KINGDOM} to recognize my authority as {HERO_KINGDOM_TITLE} of {HERO_KINGDOM_CULTURE}.",
+                text: "Sizi ve imparatorluğunuz olan {HERO_KINGDOM} ile {HERO_KINGDOM_TITLE} of {HERO_KINGDOM_CULTURE} olarak otoritemi tanımanızı talep ediyorum.",
                 condition: PlayerIsRulerAndHeroIsRulerCondition
             );
             starter.AddDialogLine(
                 id: "annexation_ask_first_reason",
                 inputToken: AnnexationRequestedToken,
                 outputToken: FirstReasonToken,
-                text: "And why should I do that?"
+                text: "Bunu neden yapayım ?"
             );
             starter.AddPlayerLine(
                 id: "annexation_strength",
                 inputToken: FirstReasonToken,
                 outputToken: AfterFirstReasonToken,
-                text: "{PLAYER_KINGDOM} is far stronger than {HERO_KINGDOM}.",
+                text: "Çünkü biz {PLAYER_KINGDOM} olarak sizden daha güçlüyüz.",
                 clickableCondition: HeroKingdomStrengthClickableCondition
             );
             starter.AddPlayerLine(
                 id: "annexation_no_reasons",
                 inputToken: FirstReasonToken,
                 outputToken: NativeGameTokens.LordPreTalk,
-                text: SharedTexts.Nevermind
+                text: SharedTexts.Boş ver
             );
             starter.AddDialogLine(
                 id: "annexation_ask_second_reason",
                 inputToken: AfterFirstReasonToken,
                 outputToken: SecondReasonToken,
-                text: "That's true, but I would need more reasons for that kind of decision."
+                text: "Bu doğru, ancak bu tür bir karar için daha fazla nedene ihtiyacım var."
             );
             starter.AddPlayerLine(
                 id: "annexation_low_fiefs",
@@ -74,19 +74,19 @@ namespace DestroyKingdom.CampaignBehaviors
                 id: "annexation_only_one_reason",
                 inputToken: SecondReasonToken,
                 outputToken: NativeGameTokens.LordPreTalk,
-                text: SharedTexts.Nevermind
+                text: SharedTexts.Boş ver
             );
             starter.AddDialogLine(
                 id: "annexation_ask_third_reason",
                 inputToken: AfterSecondReasonToken,
                 outputToken: ThirdReasonToken,
-                text: "But why should YOU be the one to rule {HERO_KINGDOM_CULTURE} people?"
+                text: "Ama neden bizi yöneten siz olmalısınız"
             );
             starter.AddPlayerLine(
                 id: "annexation_fiefs_control",
                 inputToken: ThirdReasonToken,
                 outputToken: AfterThirdReasonToken,
-                text: "{PLAYER_KINGDOM} is controlling big part of {HERO_KINGDOM_CULTURE} lands.",
+                text: "Eski yerlerinizin yeni hakimi biz olduğumuz için.",
                 condition: PlayerAnyTraitsCondition,
                 clickableCondition: PlayerControllingCultureTownsClickableCondition
             );
@@ -94,82 +94,82 @@ namespace DestroyKingdom.CampaignBehaviors
                 id: "annexation_fiefs_control_no_traits",
                 inputToken: ThirdReasonToken,
                 outputToken: OathStartToken,
-                text: "{PLAYER_KINGDOM} is controlling big part of {HERO_KINGDOM_CULTURE} lands.",
+                text: "Eski yerlerinizin yeni hakimi biz olduğumuz için.",
                 condition: PlayerNoTraitsCondition,
                 clickableCondition: PlayerControllingCultureTownsClickableCondition
             );
             starter.AddPlayerLine(
                 id: "annexation_only_two_reasons",
                 inputToken: ThirdReasonToken, outputToken: NativeGameTokens.LordPreTalk,
-                text: SharedTexts.Nevermind
+                text: SharedTexts.Boş ver
             );
             starter.AddDialogLine(
                 id: "annexation_ask_fourth_reason",
                 inputToken: AfterThirdReasonToken,
                 outputToken: FourthReasonToken,
-                text: "Go on."
+                text: "Devam et."
             );
             starter.AddPlayerLine(
                 id: "annexation_honor",
                 inputToken: FourthReasonToken,
                 outputToken: OathStartToken,
-                text: "You can trust my word - I will be taking care of the {HERO_KINGDOM_CULTURE}.",
+                text: "Sözüme güvenebilirsin, sizinle ve kültürünüzle ilgili olacağım.",
                 condition: PlayerTraitCondition.Honorable
             );
             starter.AddPlayerLine(
                 id: "annexation_cruel",
                 inputToken: FourthReasonToken,
                 outputToken: OathStartToken,
-                text: "If you don't recognize my authority I will kill you and all your supporters.",
+                text: "Otoritemi tanımazsanız sizi ve tüm destekçilerinizi öldürürüm.",
                 condition: PlayerTraitCondition.Cruel
             );
             starter.AddPlayerLine(
                 id: "annexation_generous",
                 inputToken: FourthReasonToken,
                 outputToken: OathStartToken,
-                text: "I will generously reward everyone who will be faithful to me.",
+                text: "Bana sadık kalan herkesi cömertçe ödüllendireceğim.",
                 condition: PlayerTraitCondition.Generous
             );
             starter.AddPlayerLine(
                 id: "annexation_fearless",
                 inputToken: FourthReasonToken,
                 outputToken: OathStartToken,
-                text: "Many times I have shown my value as a fearless leader on the battlefields.",
+                text: "Savaş meydanlarında korkusuz bir lider olarak değerimi birçok kez gösterdim.",
                 condition: PlayerTraitCondition.Fearless
             );
             starter.AddPlayerLine(
                 id: "annexation_only_three_reasons",
                 inputToken: FourthReasonToken,
                 outputToken: NativeGameTokens.LordPreTalk,
-                text: SharedTexts.Nevermind
+                text: SharedTexts.Boş ver
             );
             starter.AddDialogLine(
                 id: "annexation_oath_text",
                 inputToken: OathStartToken,
                 outputToken: "annexation_oath_2",
                 text:
-                "This is hard decision, but after considering all circumstances that's the only thing that I can do."
+                "Bu zor bir karar, ancak tüm koşulları düşündükten sonra yapabileceğim tek şey bu."
             );
             starter.AddDialogLine(
                 id: "annexation_oath_text_2",
                 inputToken: "annexation_oath_2",
                 outputToken: "annexation_oath_3",
-                text: "I swear homage to you as lawful liege of mine.");
+                text: "Benim hükümdarım olarak sana hürmet ettiğime yemin ederim.");
             starter.AddDialogLine(
                 id: "annexation_oath_text_3",
                 inputToken: "annexation_oath_3",
                 outputToken: "annexation_oath_4",
-                text: "I will be at your side to fight your enemies should you need my sword.");
+                text: "Kılıcıma ihtiyacın olursa düşmanlarınla savaşmak için yanında olacağım.");
             starter.AddDialogLine(
                 id: "annexation_oath_text_4",
                 inputToken: "annexation_oath_4",
                 outputToken: "annexation_oath_5",
-                text: "And I shall defend your rights and the rights of your legitimate heirs.");
+                text: "Ben de sizin ve mirasçılarınızın haklarını savunacağım.");
             starter.AddDialogLine(
                 id: "annexation_oath_text_5",
                 inputToken: "annexation_oath_5",
                 outputToken: NativeGameTokens.LordPreTalk,
-                text: "You are now my {HERO_KINGDOM_TITLE}.",
+                text: "Sen artık buralısın.",
                 consequence: KingdomAnnexationAction.ApplyByPlayerConversation
             );
         }
@@ -179,7 +179,7 @@ namespace DestroyKingdom.CampaignBehaviors
             var heroKingdom = Hero.OneToOneConversationHero.Clan?.Kingdom;
             var playerKingdom = Hero.MainHero.Clan?.Kingdom;
             if (heroKingdom == null || playerKingdom == null) return;
-            var lowFiefsDescription = heroKingdom.Fiefs.IsEmpty() ? "does not control any fiefs" : "controls very few fiefs";
+            var lowFiefsDescription = heroKingdom.Fiefs.IsEmpty() ? "olarak hiç tımarınız yok" : "olarak az tımarınız var";
             MBTextManager.SetTextVariable("HERO_KINGDOM_TITLE", GetHeroFactionRulerText());
             MBTextManager.SetTextVariable("PLAYER_KINGDOM", playerKingdom.Name);
             MBTextManager.SetTextVariable("HERO_KINGDOM", heroKingdom.Name);
@@ -218,10 +218,10 @@ namespace DestroyKingdom.CampaignBehaviors
             var strengthRatio = KingdomExtensions.KingdomsStrengthRatio(heroKingdom, playerKingdom);
             var enoughStrengthAdvantage = strengthRatio < Settings.AnnexedKingdomMaxStrengthRatio;
             if (strengthRatio > 100)
-                explanation = new TextObject("{HERO_KINGDOM} is stronger than {PLAYER_KINGDOM}.");
+                explanation = new TextObject("{HERO_KINGDOM} sizden daha güçlü.");
             else if (!enoughStrengthAdvantage)
                 explanation = new TextObject(
-                    $"{heroKingdom.Name} has {strengthRatio}% of {playerKingdom.Name} strength. Needs to be less than {Settings.AnnexedKingdomMaxStrengthRatio}%."
+                    $"{heroKingdom.Name}, {playerKingdom.Name} gücünün %{strengthRatio} miktarına sahip. %{Settings.AnnexedKingdomMaxStrengthRatio} değerinden az olması gerekir."
                 );
             return enoughStrengthAdvantage;
         }
@@ -239,7 +239,7 @@ namespace DestroyKingdom.CampaignBehaviors
             {
                 var cultureName = Hero.OneToOneConversationHero?.Clan?.Kingdom?.Culture?.Name ?? TextObject.Empty;
                 explanation = new TextObject(
-                    $"You are controlling {playerControlledHeroCultureFiefsPercentage}% of {cultureName} fiefs ({requiredFiefsPercentage}% required)."
+                    $"{cultureName} tımarının %{playerControlledHeroCultureFiefsPercentage} kadarını kontrol ediyorsunuz, (%{requiredFiefsPercentage} gerekli)."
                 );
             }
 
@@ -257,7 +257,7 @@ namespace DestroyKingdom.CampaignBehaviors
             if (!lowOnFiefs)
             {
                 explanation =
-                    new TextObject($"{heroKingdom.Name} is controlling {fiefsCount} fiefs (maximum {maxFiefsCount}).");
+                    new TextObject($"{heroKingdom.Name}, {fiefsCount} tımar kontrol ediyor (maximum {maxFiefsCount}).");
             }
 
             return lowOnFiefs;
